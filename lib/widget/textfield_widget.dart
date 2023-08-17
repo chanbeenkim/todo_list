@@ -19,12 +19,12 @@ class TextFieldWidget extends StatelessWidget {
         borderRadius: BorderRadius.circular(8),
       ),
       child: TextField(
-        cursorColor: Colors.amber,
+        cursorColor: Colors.black,
+        maxLines: maxLine,
         decoration: InputDecoration(
           enabledBorder: InputBorder.none,
           focusedBorder: InputBorder.none,
           hintText: hintText,
-          hintMaxLines: maxLine,
         ),
       ),
     );
