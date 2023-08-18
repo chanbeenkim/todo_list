@@ -2,7 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:todo_list/constants/app_style.dart';
+import 'package:todo_list/provider/date_time_provider.dart';
 import 'package:todo_list/provider/radio_provider.dart';
 
 import '../widget/datetime_widget.dart';
@@ -16,7 +18,8 @@ class AddNewTaskModel extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final radioCategory = ref.watch(radioProvider);
+    final dateProv = ref.watch(dateProvider);
+    final timeProv = ref.watch(timeProvider);
     return Container(
       padding: const EdgeInsets.all(30),
       height: MediaQuery.of(context).size.height * 0.70,
@@ -67,39 +70,75 @@ class AddNewTaskModel extends ConsumerWidget {
 
           Row(
             children: [
-              const Expanded(
+              Expanded(
                 child: RadioWidget(
                   titleRadio: "LRN",
                   categoryColor: Colors.green,
+                  valueInput: 1,
+                  onChangeValue: () =>
+                      ref.read(radioProvider.notifier).update((state) => 1),
                 ),
               ),
               Expanded(
                 child: RadioWidget(
                   titleRadio: "WRK",
                   categoryColor: Colors.blue.shade700,
+                  valueInput: 2,
+                  onChangeValue: () =>
+                      ref.read(radioProvider.notifier).update((state) => 2),
                 ),
               ),
               Expanded(
                 child: RadioWidget(
                   titleRadio: "GEN",
                   categoryColor: Colors.amberAccent.shade700,
+                  valueInput: 3,
+                  onChangeValue: () =>
+                      ref.read(radioProvider.notifier).update((state) => 3),
                 ),
               ),
             ],
           ),
-          const Row(
+          Row(
             mainAxisAlignment: MainAxisAlignment.spaceBetween,
             children: [
               DateTimeWidget(
                 titleText: "Date",
-                valueText: "dd/mm/yy",
+                valueText: dateProv,
                 icon: CupertinoIcons.calendar,
+                onTap: () async {
+                  final getValue = await showDatePicker(
+                    context: context,
+                    initialDate: DateTime.now(),
+                    firstDate: DateTime(2021),
+                    lastDate: DateTime(2025),
+                  );
+
+                  if (getValue != null) {
+                    final format = DateFormat.yMd();
+                    ref
+                        .read(dateProvider.notifier)
+                        .update((state) => format.format(getValue));
+                  }
+                },
               ),
-              Gap(30),
+              const Gap(30),
               DateTimeWidget(
-                  titleText: "Time",
-                  valueText: "hh : mm",
-                  icon: CupertinoIcons.clock),
+                titleText: "Time",
+                valueText: timeProv,
+                icon: CupertinoIcons.clock,
+                onTap: () async {
+                  final getTime = await showTimePicker(
+                    context: context,
+                    initialTime: TimeOfDay.now(),
+                  );
+                  if (getTime != null) {
+                    ref
+                        .read(timeProvider.notifier)
+                        .update((state) => getTime.format(context));
+                  }
+                },
+              ),
             ],
           ),
 
@@ -121,7 +160,7 @@ class AddNewTaskModel extends ConsumerWidget {
                     ),
                     padding: const EdgeInsets.symmetric(vertical: 14),
                   ),
-                  onPressed: () {},
+                  onPressed: () => Navigator.pop(context),
                   child: const Text("Cancel"),
                 ),
               ),

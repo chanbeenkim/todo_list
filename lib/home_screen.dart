@@ -1,6 +1,7 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:todo_list/widget/card_todo_widget.dart';
 
 import 'common/show_model.dart';
 
@@ -101,6 +102,13 @@ class HomeScreen extends StatelessWidget {
                     ),
                   ),
                 ],
+              ),
+              // Card List Task
+              const Gap(20),
+              ListView.builder(
+                itemCount: 1,
+                shrinkWrap: true,
+                itemBuilder: (context, index) => const CardTodoListWidget(),
               ),
             ],
           ),
