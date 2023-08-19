@@ -95,7 +95,7 @@ class HomeScreen extends StatelessWidget {
                         ),
                       ),
                       context: context,
-                      builder: (context) => const AddNewTaskModel(),
+                      builder: (context) => AddNewTaskModel(),
                     ),
                     child: const Text(
                       "+ New Task",
