@@ -18,7 +18,7 @@ class TodoListApp extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ProviderScope(
+    return const ProviderScope(
       child: MaterialApp(
         home: HomeScreen(),
       ),

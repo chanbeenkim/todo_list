@@ -1,15 +1,18 @@
 import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:todo_list/provider/service_provider.dart';
 import 'package:todo_list/widget/card_todo_widget.dart';
 
 import 'common/show_model.dart';
 
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final todoData = ref.watch(fetchStreamProvider);
     return Scaffold(
       backgroundColor: Colors.grey.shade200,
       appBar: AppBar(
@@ -106,9 +109,11 @@ class HomeScreen extends StatelessWidget {
               // Card List Task
               const Gap(20),
               ListView.builder(
-                itemCount: 1,
+                itemCount: todoData.value!.length,
                 shrinkWrap: true,
-                itemBuilder: (context, index) => const CardTodoListWidget(),
+                itemBuilder: (context, index) => CardTodoListWidget(
+                  getIndex: index,
+                ),
               ),
             ],
           ),
